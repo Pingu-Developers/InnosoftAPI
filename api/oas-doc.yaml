@@ -1,0 +1,223 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Innosoft API
+  description: >-
+    Service to expose innosoft database as a RESTFUL API following Open Api v3
+    specification. 
+  contact:
+    name: Pingu Developers
+    email: pingudevelop@gmail.com
+    url: 'https://github.com/orgs/Pingu-Developers'
+  license:
+    name: MIT
+    url: 'http://opensource.org/licenses/MIT'
+paths:
+  /api/v1/events:
+    get:
+      description: Returns all events
+      operationId: getEvents
+      responses:
+        '200':
+          description: Events list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/event'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  /api/v1/events/eventId:
+    get:
+      description: Returns an event by eventId
+      operationId: findEventByEventId
+      parameters:
+        - name: eventId
+          in: path
+          description: eventId of event to fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/event'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  /api/v1/speakers:
+    get:
+      description: Returns all speakers
+      operationId: getSpeakers
+      responses:
+        '200':
+          description: Speakers list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/speaker'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  /api/v1/speakers/speakerId:
+    get:
+      description: Returns a speaker by speakerId
+      operationId: findSpeakerBySpeakerId
+      parameters:
+        - name: speakerId
+          in: path
+          description: speakerId of speaker to fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Speaker returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/speaker'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  /api/v1/posts:
+    get:
+      description: Returns all posts
+      operationId: getPosts
+      responses:
+        '200':
+          description: Posts list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/post'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  /api/v1/posts/postId:
+    get:
+      description: Returns a post by postId
+      operationId: findPostByPostId
+      parameters:
+        - name: postId
+          in: path
+          description: postId of post to fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Post returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/post'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+components:
+  schemas:
+    errorModel:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    event:
+      type: object
+      required:
+        - eventId
+        - eventName
+        - eventStartDateTime
+        - eventEndDateTime
+        - eventTag
+        - eventOrganizer
+      properties:
+        eventId:
+          type: integer
+          format: int32
+        eventName:
+          type: string
+        eventStartDateTime:
+          type: string
+          format: date-time
+        eventEndDateTime:
+          type: string
+          format: date-time
+        eventTags:
+          type: string
+        eventOrganizer:
+          type: string
+        eventSpeaker:
+          type: integer
+          format: int32
+    speaker:
+      type: object
+      required:
+        - speakerId
+        - speakerName
+        - speakerDescription
+        - speakerContactInfo
+      properties:
+        speakerId:
+          type: integer
+          format: int32
+        speakerName:
+          type: string
+        speakerDescription:
+          type: string
+        speakerContactInfo:
+          type: string
+    post:
+      type: object
+      required:
+        - postId
+        - postTitle
+        - postContent
+        - postDateTime
+        - postAuthor
+      properties:
+        postId:
+          type: integer
+          format: int32
+        postTitle:
+          type: string
+        postContent:
+          type: string
+        postDateTime:
+          type: string
+          format: date-time
+        postAuthor:
+          type: string
