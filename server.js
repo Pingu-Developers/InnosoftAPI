@@ -21,7 +21,7 @@ const deploy = (env) => {
 
       const options = {
         controllers: path.join(__dirname, './controllers'),
-        loglevel: 'info',
+        loglevel: env === 'test' ? 'error' : 'info',
         strict: false,
         router: true,
         validator: true
@@ -31,11 +31,14 @@ const deploy = (env) => {
 
       oasTools.initialize(oasDoc, app, function () {
         http.createServer(app).listen(serverPort, function () {
-          console.log('App running at http://localhost:' + serverPort);
-          console.log('________________________________________________________________');
-          if (options.docs !== false) {
-            console.log('API docs (Swagger UI) available on http://localhost:' + serverPort + '/docs');
+          if (env !== 'test') {
             console.log('________________________________________________________________');
+            console.log('App running at http://localhost:' + serverPort);
+            console.log('________________________________________________________________');
+            if (options.docs !== false) {
+              console.log('API docs (Swagger UI) available on http://localhost:' + serverPort + '/docs');
+              console.log('________________________________________________________________');
+            }
           }
           resolve();
         });

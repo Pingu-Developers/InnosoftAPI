@@ -1,13 +1,30 @@
 const assert = require('assert');
+const server = require('../server');
+const sinon = require('sinon');
 
-describe("Test", function() {
+describe("Innosoft API Tests:", function() {
 
-    it("Should pass", function() {
-        assert.equal(1, 1);
+    before( (done) => {
+        server.deploy('test').then(() => {
+            sinon.stub(console);
+            done();
+        }).catch( (err) => {
+            console.log(err);
+            done(err);;
+        })
     });
 
-    it("Should also pass", function() {
-        assert.ok(true);
+    describe("Testing endpoint /api/v1/test", () => {
+        it("Should always pass", function() {
+            assert.equal(1, 1);
+        });
+    
+        it("Should also always pass", function() {
+            assert.ok(true);
+        });
     });
 
+    after((done) => {
+        server.undeploy(done);
+    });
 });
