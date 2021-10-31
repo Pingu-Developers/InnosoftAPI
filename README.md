@@ -1,6 +1,6 @@
 # Innosoft API
-[![Node.js CI](https://github.com/Pingu-Developers/InnosoftAPI/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/Pingu-Developers/InnosoftAPI/actions)
-[![Coverage Status](https://coveralls.io/repos/github/Pingu-Developers/InnosoftAPI/badge.svg)](https://coveralls.io/repos/github/Pingu-Developers/InnosoftAPI)
+[![Node.js CI](https://github.com/Pingu-Developers/InnosoftAPI/actions/workflows/nodejs.yml/badge.svg)](https://github.com/Pingu-Developers/InnosoftAPI/actions/workflows/nodejs.yml)
+[![Coverage Status](https://coveralls.io/repos/github/Pingu-Developers/InnosoftAPI/badge.svg?branch=main)](https://coveralls.io/github/Pingu-Developers/InnosoftAPI?branch=main)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-green.svg)](https://conventionalcommits.org)
 
 ## Introduction
