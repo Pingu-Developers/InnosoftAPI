@@ -32,6 +32,16 @@
                     "time_start": "30600",
                     "time_end": "30800"
                 }
+            ],
+            "weird_date" : [
+                {
+                    "ID": "1",
+                    "post_title": "Event 1",
+                    "start": "2016-01-01",
+                    "end": "0000-00-00",
+                    "time_start": "30600",
+                    "time_end": "30800"
+                }
             ]
         },
         "responses" : {
@@ -57,29 +67,42 @@
                     "eventStartDateTime": "2016-01-01T08:30:00.000Z",
                     "eventEndDateTime": "2016-01-01T08:33:20.000Z"
                 }
+            ],
+            "weird_date": [
+                {
+                    "eventId": "1",
+                    "eventName": "Event 1",
+                    "eventStartDateTime": "2016-01-01T08:30:00.000Z",
+                    "eventEndDateTime": "2016-01-01T08:33:20.000Z"
+                }
             ]
         }
     },
     "tests" : {
-        "api/v1/events": [
-            {   
-                "description" : "Should return no events when empty", 
-                "query" : { "$ref" : "#/$defs/queries/events" },
-                "result" : { "$ref" : "#/$defs/results/empty" },
-                "response" : { "$ref" : "#/$defs/responses/empty"}
-            },
-            {
-                "description" : "Should return one event",
-                "query" : { "$ref" : "#/$defs/queries/events" },
-                "result" : { "$ref" : "#/$defs/results/one_event" },
-                "response" : { "$ref" : "#/$defs/responses/one_event" }
-            },
-            {
-                "description" : "Should return two events",
-                "query" : { "$ref" : "#/$defs/queries/events" },
-                "result" : { "$ref" : "#/$defs/results/two_events" },
-                "response" : { "$ref" : "#/$defs/responses/two_events" }
-            }
-        ]
+        "api/v1/events": {
+            "query" : { "$ref" : "#/$defs/queries/events" },
+            "cases" : [
+                {   
+                    "description" : "Should return no events when empty", 
+                    "result" : { "$ref" : "#/$defs/results/empty" },
+                    "response" : { "$ref" : "#/$defs/responses/empty"}
+                },
+                {
+                    "description" : "Should return one event",
+                    "result" : { "$ref" : "#/$defs/results/one_event" },
+                    "response" : { "$ref" : "#/$defs/responses/one_event" }
+                },
+                {
+                    "description" : "Should return two events",
+                    "result" : { "$ref" : "#/$defs/results/two_events" },
+                    "response" : { "$ref" : "#/$defs/responses/two_events" }
+                },
+                {
+                    "description" : "Should have end date equal to start date if end date is 0000-00-00",
+                    "result":  { "$ref" : "#/$defs/results/weird_date" },
+                    "response" : { "$ref" : "#/$defs/responses/weird_date" }
+                }
+            ]
+        }
     }
 }
