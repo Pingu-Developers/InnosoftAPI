@@ -10,8 +10,8 @@ module.exports.getEvents = function getEvents (req, res, next) {
   db.query(sql).then((result) => {
     result = result.map((item) => {
       item.start = item.start === '0000-00-00' ? new Date() : new Date(`${item.start}`);
+      item.end = item.end === '0000-00-00' ? new Date(`${item.start}`) : new Date(`${item.end}`);
       item.start.setSeconds(item.time_start);
-      item.end = item.end === '0000-00-00' ? item.start : new Date(`${item.end}`);
       item.end.setSeconds(item.time_end);
 
       return {
