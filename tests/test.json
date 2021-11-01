@@ -1,0 +1,85 @@
+{   
+    "$defs" : {
+        "queries" : {
+            "events" : "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft';"
+        },
+        "results" : {
+            "empty" : [],
+            "one_event": [
+                {
+                    "ID": "1",
+                    "post_title": "Event 1",
+                    "start": "2016-01-01",
+                    "end": "2016-01-01",
+                    "time_start": "30600",
+                    "time_end": "30800"
+                }
+            ],
+            "two_events" : [
+                {
+                    "ID": "1",
+                    "post_title": "Event 1",
+                    "start": "2016-01-01",
+                    "end": "2016-01-01",
+                    "time_start": "30600",
+                    "time_end": "30800"
+                },
+                {
+                    "ID": "2",
+                    "post_title": "Event 2",
+                    "start": "2016-01-01",
+                    "end": "2016-01-01",
+                    "time_start": "30600",
+                    "time_end": "30800"
+                }
+            ]
+        },
+        "responses" : {
+            "empty" : [],
+            "one_event": [
+                {
+                    "eventId": "1",
+                    "eventName": "Event 1",
+                    "eventStartDateTime": "2016-01-01T08:30:00.000Z",
+                    "eventEndDateTime": "2016-01-01T08:33:20.000Z"
+                }
+            ],
+            "two_events" : [
+                {
+                    "eventId": "1",
+                    "eventName": "Event 1",
+                    "eventStartDateTime": "2016-01-01T08:30:00.000Z",
+                    "eventEndDateTime": "2016-01-01T08:33:20.000Z"
+                },
+                {
+                    "eventId": "2",
+                    "eventName": "Event 2",
+                    "eventStartDateTime": "2016-01-01T08:30:00.000Z",
+                    "eventEndDateTime": "2016-01-01T08:33:20.000Z"
+                }
+            ]
+        }
+    },
+    "tests" : {
+        "api/v1/events": [
+            {   
+                "description" : "Should return no events when empty", 
+                "query" : { "$ref" : "#/$defs/queries/events" },
+                "result" : { "$ref" : "#/$defs/results/empty" },
+                "response" : { "$ref" : "#/$defs/responses/empty"}
+            },
+            {
+                "description" : "Should return one event",
+                "query" : { "$ref" : "#/$defs/queries/events" },
+                "result" : { "$ref" : "#/$defs/results/one_event" },
+                "response" : { "$ref" : "#/$defs/responses/one_event" }
+            },
+            {
+                "description" : "Should return two events",
+                "query" : { "$ref" : "#/$defs/queries/events" },
+                "result" : { "$ref" : "#/$defs/results/two_events" },
+                "response" : { "$ref" : "#/$defs/responses/two_events" }
+            }
+        ]
+    }
+}
