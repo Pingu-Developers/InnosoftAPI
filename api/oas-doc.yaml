@@ -148,6 +148,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/post'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '400':
+          description: Invalid postId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
         default:
           description: unexpected error
           content:
