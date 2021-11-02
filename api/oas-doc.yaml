@@ -207,17 +207,20 @@ components:
         - speakerId
         - speakerName
         - speakerDescription
-        - speakerContactInfo
       properties:
         speakerId:
           type: integer
           format: int32
         speakerName:
           type: string
+        speakerJob:
+          type: string
         speakerDescription:
           type: string
-        speakerContactInfo:
+        speakerEmail:
           type: string
+        speakerUrls:
+          type: array
     post:
       type: object
       required:
