@@ -32,7 +32,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-  /api/v1/events/eventId:
+  /api/v1/events/{eventId}:
     get:
       description: Returns an event by eventId
       operationId: findEventByEventId
@@ -50,6 +50,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/event'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '400':
+          description: Invalid eventId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
         default:
           description: unexpected error
           content:
@@ -75,7 +87,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-  /api/v1/speakers/speakerId:
+  /api/v1/speakers/{speakerId}:
     get:
       description: Returns a speaker by speakerId
       operationId: findSpeakerBySpeakerId
@@ -118,7 +130,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-  /api/v1/posts/postId:
+  /api/v1/posts/{postId}:
     get:
       description: Returns a post by postId
       operationId: findPostByPostId
