@@ -8,7 +8,7 @@ const deref = require('json-schema-deref-sync');
 const tests = deref(require('./test.json')).tests;
 const host = "http://localhost:5000"
 
-describe("Innosoft API Tests:", function() {
+describe("_________________Innosoft API Tests_________________", function() {
 
     /* EXECUTED BEFORE ALL TESTS */
     before( (done) => {
@@ -19,50 +19,52 @@ describe("Innosoft API Tests:", function() {
             done(err);
         })
     });
+    
+    /* Restore mock functionality after each test*/
+    afterEach( () => { 
+        mock.restore()
+    });        
 
     /* ENDPOINT TESTS */
-    describe("[Positive Case] Testing endpoint /api/v1/events : ", () => {
-        after( () => mock.restore());
-        apiEventPositiveTest();
-    });
-
-    describe("[Negative Case] Testing endpoint /api/v1/events : ", () => {
-        after( () => mock.restore());
-        apiEventNegativeTest();
-    });
-
-    function apiEventPositiveTest() {
-        var apitest = tests["api/v1/events"];
-        for (let test of apitest.cases) {
-            it (test.description , () => {
-                mock.query(apitest.query, test.result);
-                return axios.get(host + '/api/v1/events').then((response) => {
-                    assert.equal(JSON.stringify(response.data), JSON.stringify(test.response));
-                }).catch((err) => {
-                    console.log(err.response.data);
-                    assert.fail(`Error on request`);
-                });
-            });
-        }
-    }
-    function apiEventNegativeTest() {
-        var apitest = tests["api/v1/events"];
-        it ("Should respond with code 500 when database is down", () => {
-            return axios.get(host + '/api/v1/events').then(() => {
-                assert.fail(`Error on request`);
-            }).catch((err) => {
-                assert.equal(err.response.status, 500);
+    describe("\nPositive Cases:", () => {
+        Object.keys(tests).forEach( (key) => {
+            describe(`- [ ${key} ]`, () => {
+                var apitest = tests[key];
+                for (let test of apitest.cases) {
+                    it (test.description , async () => {
+                        mock.query(apitest.query, test.result, test.params ? Object.values(test.params) : undefined);
+                        var url = host + '/' + key.replace(/\{([\w]+)\}/g, (str) => test.params[str.slice(1, -1)]);
+                        await axios.get(url).then((response) => {
+                            assert.equal(JSON.stringify(response.data), JSON.stringify(test.response));
+                        }).catch((err) => {
+                            console.log(err.response.data);
+                            assert.fail(`Error on request`);
+                        });
+                    });
+                }
             });
         });
-        it ("Should respond with code 500 method fails", () => {
-            mock.query(apitest.query, null);
-            return axios.get(host + '/api/v1/events').then(() => {
-                assert.fail(`Error on request`);
-            }).catch((err) => {
-                assert.equal(err.response.status, 500);
+    });
+
+    describe("\nNegative Cases", () => {
+        Object.keys(tests).forEach( (key) => {
+            describe(`- [ ${key} ]`, () => {
+                var apitest = tests[key];
+                for (let test of apitest.negativeCases) {
+                    it (test.description , async () => {
+                        if (apitest.query && test.result)
+                            mock.query(apitest.query, test.result, test.params ? Object.values(test.params) : undefined);
+                        var url = host + '/' + key.replace(/\{([\w]+)\}/g, (str) => test.params[str.slice(1, -1)]);
+                        await axios.get(url).then((r) => {
+                            assert.fail(`Error on request`);
+                        }).catch((err) => {
+                            assert.equal(err.response.status, test.code);
+                        });
+                    });
+                }
             });
         });
-    }
+    });
 
     /* EXECUTED AFTER ALL TESTS */
     after((done) => {

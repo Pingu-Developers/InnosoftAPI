@@ -1,7 +1,8 @@
 {   
     "$defs" : {
         "queries" : {
-            "events" : "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft';"
+            "events" : "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft';",
+            "eventId": "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft' and posts.ID=?;"
         },
         "results" : {
             "empty" : [],
@@ -101,6 +102,52 @@
                     "description" : "Should have end date equal to start date if end date is 0000-00-00",
                     "result":  { "$ref" : "#/$defs/results/weird_date" },
                     "response" : { "$ref" : "#/$defs/responses/weird_date" }
+                }
+            ],
+            "negativeCases" : [
+                {   
+                    "description" : "Should respond with code 500 when database is down", 
+                    "code" : 500
+                },
+                {   
+                    "description" : "Should respond with code 500 if method fails", 
+                    "result" : "wrong result",
+                    "code" : 500
+                }
+            ]
+        },
+        "api/v1/events/{eventId}": {
+            "query" : { "$ref" : "#/$defs/queries/eventId" },
+            "cases" : [
+                {   
+                    "description" : "Should return event with ID = 1", 
+                    "params" : { "eventId" : "1" },
+                    "result" : { "$ref" : "#/$defs/results/one_event" },
+                    "response" : { "$ref" : "#/$defs/responses/one_event/0"}
+                }
+            ],
+            "negativeCases" : [
+                {   
+                    "description" : "Should respond with code 500 when database is down", 
+                    "params" : { "eventId" : "1" },
+                    "code" : 500
+                },
+                {
+                    "description" : "Should respond with code 404 when event does not exist", 
+                    "result" : { "$ref" : "#/$defs/results/empty" },
+                    "params" : { "eventId" : "3003" },
+                    "code" : 404
+                },
+                {   
+                    "params" : { "eventId" : "3003" },
+                    "description" : "Should respond with code 500 if method fails", 
+                    "result" : "wrong result",
+                    "code" : 500
+                },
+                {   
+                    "params" : { "eventId" : "abcd" },
+                    "description" : "Should respond with code 400 if param is invalid", 
+                    "code" : 400
                 }
             ]
         }
