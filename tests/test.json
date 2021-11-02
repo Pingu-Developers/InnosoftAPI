@@ -3,7 +3,8 @@
         "queries" : {
             "events" : "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft';",
             "eventId": "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft' and posts.ID=?;",
-            "posts": "SELECT p.ID,post_title,post_content,post_date,display_name FROM wp_posts p \n  RIGHT JOIN wp_users u ON post_author = u.ID WHERE post_type='post' AND post_status='publish' \n  ORDER BY p.post_date DESC;"
+            "posts": "SELECT p.ID,post_title,post_content,post_date,display_name FROM wp_posts p \n  RIGHT JOIN wp_users u ON post_author = u.ID WHERE post_type='post' AND post_status='publish' \n  ORDER BY p.post_date DESC;",
+            "postId": "SELECT p.ID,post_title,post_content,post_date,display_name FROM wp_posts p \n  RIGHT JOIN wp_users u ON post_author = u.ID WHERE post_type='post' AND post_status='publish' \n  AND p.ID=? ORDER BY p.post_date DESC;"
         },
         "results" : {
             "empty" : [],
@@ -230,6 +231,41 @@
                     "description" : "Should respond with code 500 if method fails", 
                     "result" : "wrong result",
                     "code" : 500
+                }
+            ]
+        },
+        "api/v1/posts/{postId}": {
+            "query" : { "$ref" : "#/$defs/queries/postId" },
+            "cases" : [
+                {   
+                    "description" : "Should return post with ID = 1", 
+                    "params" : { "postId" : "1" },
+                    "result" : { "$ref" : "#/$defs/results/one_post" },
+                    "response" : { "$ref" : "#/$defs/responses/one_post/0"}
+                }
+            ],
+            "negativeCases" : [
+                {   
+                    "description" : "Should respond with code 500 when database is down", 
+                    "params" : { "postId" : "1" },
+                    "code" : 500
+                },
+                {
+                    "description" : "Should respond with code 404 when event does not exist", 
+                    "result" : { "$ref" : "#/$defs/results/empty" },
+                    "params" : { "postId" : "3003" },
+                    "code" : 404
+                },
+                {   
+                    "params" : { "postId" : "3003" },
+                    "description" : "Should respond with code 500 if method fails", 
+                    "result" : "wrong result",
+                    "code" : 500
+                },
+                {   
+                    "params" : { "postId" : "abcd" },
+                    "description" : "Should respond with code 400 if param is invalid", 
+                    "code" : 400
                 }
             ]
         }
