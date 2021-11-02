@@ -105,6 +105,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/speaker'
+        '404':
+          description: Speaker not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '400':
+          description: Invalid speakerId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
         default:
           description: unexpected error
           content:
