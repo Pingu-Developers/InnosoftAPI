@@ -2,7 +2,8 @@
     "$defs" : {
         "queries" : {
             "events" : "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft';",
-            "eventId": "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft' and posts.ID=?;"
+            "eventId": "SELECT posts.ID,post_title,start,end,time_start,time_end \n    FROM wp_posts posts RIGHT JOIN wp_mec_events ev on posts.ID = ev.post_id \n    WHERE post_type = 'mec-events' and post_status not like 'auto-draft' and posts.ID=?;",
+            "posts": "SELECT p.ID,post_title,post_content,post_date,display_name FROM wp_posts p \n  RIGHT JOIN wp_users u ON post_author = u.ID WHERE post_type='post' AND post_status='publish' \n  ORDER BY p.post_date DESC;"
         },
         "results" : {
             "empty" : [],
@@ -34,7 +35,7 @@
                     "time_end": "30800"
                 }
             ],
-            "weird_date" : [
+            "weird_date_event" : [
                 {
                     "ID": "1",
                     "post_title": "Event 1",
@@ -42,6 +43,31 @@
                     "end": "0000-00-00",
                     "time_start": "30600",
                     "time_end": "30800"
+                }
+            ],
+            "one_post" : [
+                {
+                    "ID": "1",
+                    "post_title": "Post 1",
+                    "post_content": "This is the content of post 1",
+                    "post_date": "2016-01-01 10:10:01",
+                    "display_name": "John Doe"
+                }
+            ],
+            "two_posts" : [
+                {
+                    "ID": "1",
+                    "post_title": "Post 1",
+                    "post_content": "This is the content of post 1",
+                    "post_date": "2016-01-01 10:10:01",
+                    "display_name": "John Doe"
+                },
+                {
+                    "ID": "2",
+                    "post_title": "Post 2",
+                    "post_content": "This is the content of post 2",
+                    "post_date": "2018-01-01 10:10:01",
+                    "display_name": "John Doe"
                 }
             ]
         },
@@ -69,12 +95,37 @@
                     "eventEndDateTime": "2016-01-01T08:33:20.000Z"
                 }
             ],
-            "weird_date": [
+            "weird_date_event": [
                 {
                     "eventId": "1",
                     "eventName": "Event 1",
                     "eventStartDateTime": "2016-01-01T08:30:00.000Z",
                     "eventEndDateTime": "2016-01-01T08:33:20.000Z"
+                }
+            ],
+            "one_post" : [
+                {
+                    "postId": "1",
+                    "postTitle": "Post 1",
+                    "postContent": "This is the content of post 1",
+                    "postDateTime": "2016-01-01T09:10:01.000Z",
+                    "postAuthor": "John Doe"
+                }
+            ],
+            "two_posts" : [
+                {
+                    "postId": "1",
+                    "postTitle": "Post 1",
+                    "postContent": "This is the content of post 1",
+                    "postDateTime": "2016-01-01T09:10:01.000Z",
+                    "postAuthor": "John Doe"
+                },
+                {
+                    "postId": "2",
+                    "postTitle": "Post 2",
+                    "postContent": "This is the content of post 2",
+                    "postDateTime": "2018-01-01T09:10:01.000Z",
+                    "postAuthor": "John Doe"
                 }
             ]
         }
@@ -100,8 +151,8 @@
                 },
                 {
                     "description" : "Should have end date equal to start date if end date is 0000-00-00",
-                    "result":  { "$ref" : "#/$defs/results/weird_date" },
-                    "response" : { "$ref" : "#/$defs/responses/weird_date" }
+                    "result":  { "$ref" : "#/$defs/results/weird_date_event" },
+                    "response" : { "$ref" : "#/$defs/responses/weird_date_event" }
                 }
             ],
             "negativeCases" : [
@@ -148,6 +199,37 @@
                     "params" : { "eventId" : "abcd" },
                     "description" : "Should respond with code 400 if param is invalid", 
                     "code" : 400
+                }
+            ]
+        },
+        "api/v1/posts": {
+            "query" : { "$ref" : "#/$defs/queries/posts" },
+            "cases" : [
+                {   
+                    "description" : "Should return no posts when empty", 
+                    "result" : { "$ref" : "#/$defs/results/empty" },
+                    "response" : { "$ref" : "#/$defs/responses/empty"}
+                },
+                {
+                    "description" : "Should return one post",
+                    "result" : { "$ref" : "#/$defs/results/one_post" },
+                    "response" : { "$ref" : "#/$defs/responses/one_post"}
+                },
+                {
+                    "description" : "Should return two posts",
+                    "result" : { "$ref" : "#/$defs/results/two_posts" },
+                    "response" : { "$ref" : "#/$defs/responses/two_posts"}
+                }
+            ],
+            "negativeCases" : [
+                {   
+                    "description" : "Should respond with code 500 when database is down", 
+                    "code" : 500
+                },
+                {   
+                    "description" : "Should respond with code 500 if method fails", 
+                    "result" : "wrong result",
+                    "code" : 500
                 }
             ]
         }
