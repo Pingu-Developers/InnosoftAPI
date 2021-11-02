@@ -8,9 +8,9 @@ module.exports.getEvents = function getEvents (req, res, next) {
     WHERE post_type = 'mec-events' and post_status not like 'auto-draft';`;
 
   db.query(sql).then((result) => {
-    var events = result.map((item) => {
-      var start = item.start === '0000-00-00' ? new Date() : new Date(`${item.start}`);
-      var end = item.end === '0000-00-00' ? new Date(`${item.start}`) : new Date(`${item.end}`);
+    const events = result.map((item) => {
+      const start = item.start === '0000-00-00' ? new Date() : new Date(`${item.start}`);
+      const end = item.end === '0000-00-00' ? new Date(`${item.start}`) : new Date(`${item.end}`);
       start.setSeconds(item.time_start);
       end.setSeconds(item.time_end);
 

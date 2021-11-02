@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const dbCon = require('./dbConnection');
-var mock = sinon.mock(dbCon);
+let mock = sinon.mock(dbCon);
 
 exports.query = (query, output, params) => {
   if (params) {
@@ -15,5 +15,5 @@ exports.restore = () => {
     mock = sinon.mock(dbCon);
   } catch {
     // do nothing
-  };
+  }
 };
