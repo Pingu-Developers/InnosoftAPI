@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
-var varapiv1speakersspeakerIdController = require('./apiv1speakersspeakerIdControllerService');
+const varapiv1speakersspeakerIdController = require('./apiv1speakersspeakerIdControllerService');
 
-module.exports.findSpeakerBySpeakerId = function findSpeakerBySpeakerId(req, res, next) {
+module.exports.findSpeakerBySpeakerId = function findSpeakerBySpeakerId (req, res, next) {
   varapiv1speakersspeakerIdController.findSpeakerBySpeakerId(req.swagger.params, res, next);
 };

@@ -32,7 +32,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-  /api/v1/events/eventId:
+  /api/v1/events/{eventId}:
     get:
       description: Returns an event by eventId
       operationId: findEventByEventId
@@ -50,6 +50,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/event'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '400':
+          description: Invalid eventId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
         default:
           description: unexpected error
           content:
@@ -75,7 +87,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-  /api/v1/speakers/speakerId:
+  /api/v1/speakers/{speakerId}:
     get:
       description: Returns a speaker by speakerId
       operationId: findSpeakerBySpeakerId
@@ -93,6 +105,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/speaker'
+        '404':
+          description: Speaker not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '400':
+          description: Invalid speakerId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
         default:
           description: unexpected error
           content:
@@ -118,7 +142,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-  /api/v1/posts/postId:
+  /api/v1/posts/{postId}:
     get:
       description: Returns a post by postId
       operationId: findPostByPostId
@@ -136,6 +160,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/post'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '400':
+          description: Invalid postId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
         default:
           description: unexpected error
           content:
@@ -147,12 +183,8 @@ components:
     errorModel:
       type: object
       required:
-        - code
         - message
       properties:
-        code:
-          type: integer
-          format: int32
         message:
           type: string
     event:
@@ -162,8 +194,6 @@ components:
         - eventName
         - eventStartDateTime
         - eventEndDateTime
-        - eventTag
-        - eventOrganizer
       properties:
         eventId:
           type: integer
@@ -189,17 +219,20 @@ components:
         - speakerId
         - speakerName
         - speakerDescription
-        - speakerContactInfo
       properties:
         speakerId:
           type: integer
           format: int32
         speakerName:
           type: string
+        speakerJob:
+          type: string
         speakerDescription:
           type: string
-        speakerContactInfo:
+        speakerEmail:
           type: string
+        speakerUrls:
+          type: array
     post:
       type: object
       required:

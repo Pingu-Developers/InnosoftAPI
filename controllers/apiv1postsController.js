@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
-var varapiv1postsController = require('./apiv1postsControllerService');
+const varapiv1postsController = require('./apiv1postsControllerService');
 
-module.exports.getPosts = function getPosts(req, res, next) {
+module.exports.getPosts = function getPosts (req, res, next) {
   varapiv1postsController.getPosts(req.swagger.params, res, next);
 };
