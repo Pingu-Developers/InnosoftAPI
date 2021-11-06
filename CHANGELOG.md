@@ -1,4 +1,13 @@
-# 1.1.0 (2021-11-02)
+# [1.2.0](https://github.com/Pingu-Developers/InnosoftAPI/compare/v1.1.0...v1.2.0) (2021-11-06)
+
+
+### Features
+
+* Added location and organizer to events ([79b5fb5](https://github.com/Pingu-Developers/InnosoftAPI/commit/79b5fb5da86598d4a3d39d27552bdad7600dc3f3))
+
+
+
+# [1.1.0](https://github.com/Pingu-Developers/InnosoftAPI/compare/d14dfa706805924214d3911e396a31231a65423c...v1.1.0) (2021-11-02)
 
 
 ### Bug Fixes
