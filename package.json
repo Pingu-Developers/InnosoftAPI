@@ -42,5 +42,12 @@
     "ignore": [
       "/tests/**"
     ]
+  },
+  "nyc": {
+    "exclude": [
+      "utils/dbConnection.js",
+      "tests",
+      "server.js"
+    ] 
   }
 }
