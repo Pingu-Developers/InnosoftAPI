@@ -33,10 +33,10 @@ const deploy = (env) => {
         http.createServer(app).listen(serverPort, function () {
           if (env !== 'test') {
             console.log('________________________________________________________________');
-            console.log('App running at http://localhost:' + serverPort);
+            console.log('App running!');
             console.log('________________________________________________________________');
             if (options.docs !== false) {
-              console.log('API docs (Swagger UI) available on http://localhost:' + serverPort + '/docs');
+              console.log('API docs (Swagger UI) available on /docs');
               console.log('________________________________________________________________');
             }
           }
