@@ -1,48 +1,43 @@
 ---
 - hosts: all
   tasks:
-    - name: Create ubuntu user
-      become_user: ubuntu
-      become: true
-      user:
-        name: ubuntu
-        comment: Ubuntu app user
-        state: present
-
     - name: Install packages
-      become_user: ubuntu
-      become: true
+      become: yes
       apt:
         name: "{{ packages }}"
         update_cache: yes
       vars:
         packages:
+        - acl
         - git
         - nodejs
         - npm
-        
-    - name: Install npm packages
-      become_user: ubuntu
-      become: true
-      shell: npm install -g {{ npm_packages }}
-      vars:
-        npm_packages:
-        - expo-cli
+    
+    - name: Install forever globally
+      become: yes
+      npm:
+        global: yes
+        name: forever
+
+    - name: Create innosoft user
+      become: yes
+      user:
+        name: innosoft
+        comment: Innosoft app user
+        state: present
 
     - name: Clone project
-      become_user: ubuntu
-      become: true
+      become: yes
+      become_user: innosoft
       git:
         repo: https://github.com/Pingu-Developers/InnosoftAPI.git
-        dest: /home/ubuntu/InnosoftAPI
+        dest: /home/innosoft/InnosoftAPI
         version: main
 
-    - name: Install project
-      become_user: ubuntu
-      become: true
-      shell: cd /home/ubuntu/InnosoftAPI && expo install
-
-    - name: Start project
-      become_user: ubuntu
-      become: true
-      shell: cd /home/ubuntu/InnosoftAPI && npm run start
+    - name: Run project
+      become: yes
+      become_user: innosoft
+      command: "{{ item }} chdir=/home/innosoft/InnosoftAPI"
+      with_items:
+        - npm install
+        - forever start index.js
