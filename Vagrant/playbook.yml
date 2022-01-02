@@ -1,0 +1,48 @@
+---
+- hosts: all
+  tasks:
+    - name: Create ubuntu user
+      become_user: ubuntu
+      become: true
+      user:
+        name: ubuntu
+        comment: Ubuntu app user
+        state: present
+
+    - name: Install packages
+      become_user: ubuntu
+      become: true
+      apt:
+        name: "{{ packages }}"
+        update_cache: yes
+      vars:
+        packages:
+        - git
+        - nodejs
+        - npm
+        
+    - name: Install npm packages
+      become_user: ubuntu
+      become: true
+      shell: npm install -g {{ npm_packages }}
+      vars:
+        npm_packages:
+        - expo-cli
+
+    - name: Clone project
+      become_user: ubuntu
+      become: true
+      git:
+        repo: https://github.com/Pingu-Developers/InnosoftAPI.git
+        dest: /home/ubuntu/InnosoftAPI
+        version: main
+
+    - name: Install project
+      become_user: ubuntu
+      become: true
+      shell: cd /home/ubuntu/InnosoftAPI && expo install
+
+    - name: Start project
+      become_user: ubuntu
+      become: true
+      shell: cd /home/ubuntu/InnosoftAPI && npm run start
