@@ -32,6 +32,7 @@ module.exports.getEvents = function getEvents (req, res, next) {
       if (item.location && !item.location.match(/Sin categor.*/)) response.eventLocation = item.location;
       return response;
     });
+    events.sort((a,b) => a.eventStartDateTime > b.eventStartDateTime ? 1 : -1);
     res.status(200).send(events);
   }).catch((err) => {
     res.status(500).send({ message: err.message });
