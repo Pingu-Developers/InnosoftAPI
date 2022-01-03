@@ -23,6 +23,7 @@ exports.query = (sql, params) => {
   return new Promise((resolve, reject) => {
     _getDBConnection().then(connection => {
       connection.query(sql, params, (err, rows) => {
+        connection.release();
         if (err) reject(err);
         else resolve(rows);
       });
