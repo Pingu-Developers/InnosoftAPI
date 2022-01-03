@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: mysql_db
+    image: percona
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=testdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./dbdata/innosoft.sql:/docker-entrypoint-initdb.d/innosoft.sql
+
+  innoApi:
+    container_name: innoApi
+    image: pingudevelop/innosoft-api:develop
+    restart: always
+    ports:
+      - '5000:80'
+    environment:
+        - DB_HOST=mysql_db
+        - DB_PORT=3306
+        - DB_USER=root
+        - DB_PASSWORD=testdb
+        - DB_NAME=innosoft-test
+  
+  # Locust for load testing
+  locust:
+    container_name: locust
+    depends_on:
+      - innoApi
+      - db
+    image: locustio/locust
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --host=http://innoApi:80

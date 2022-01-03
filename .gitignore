@@ -16,3 +16,6 @@ tasks
 
 # Vagrant
 .vagrant
+
+# Locust
+__pycache__
