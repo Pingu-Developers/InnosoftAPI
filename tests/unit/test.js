@@ -1,7 +1,7 @@
 const assert = require('assert');
 const axios = require('axios');
-const server = require('../server');
-const mock = require('../utils/dbMockup');
+const server = require('../../server');
+const mock = require('../../utils/dbMockup');
 const deref = require('json-schema-deref-sync');
 
 /* Declaring const vars */
