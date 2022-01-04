@@ -6,6 +6,7 @@ const deploy = (env) => {
       const fs = require('fs');
       const http = require('http');
       const path = require('path');
+      const mongoose = require('mongoose');
 
       const express = require('express');
       const app = express();
@@ -13,6 +14,10 @@ const deploy = (env) => {
       const jsyaml = require('js-yaml');
 
       const serverPort = process.env.PORT || 5000;
+      const mongoPort = process.env.MONGO_PORT || 27017;
+      const mongoHost = process.env.MONGO_HOST || 'localhost';
+      const mongoDBName = process.env.MONGO_DBNAME || 'innochatdb';
+      const mongoURL = `mongodb://${mongoHost}:${mongoPort}/${mongoDBName}`;
 
       app.use(express.json({ strict: false }));
 
@@ -27,22 +32,24 @@ const deploy = (env) => {
         validator: true
       };
 
-      oasTools.configure(options);
+      mongoose.connect(mongoURL).then(() => {
+        oasTools.configure(options);
 
-      oasTools.initialize(oasDoc, app, function () {
-        http.createServer(app).listen(serverPort, function () {
-          if (env !== 'test') {
-            console.log('________________________________________________________________');
-            console.log('App running!');
-            console.log('________________________________________________________________');
-            if (options.docs !== false) {
-              console.log('API docs (Swagger UI) available on /docs');
+        oasTools.initialize(oasDoc, app, function () {
+          http.createServer(app).listen(serverPort, function () {
+            if (env !== 'test') {
               console.log('________________________________________________________________');
+              console.log('App running!');
+              console.log('________________________________________________________________');
+              if (options.docs !== false) {
+                console.log('API docs (Swagger UI) available on /docs');
+                console.log('________________________________________________________________');
+              }
             }
-          }
-          resolve();
+            resolve();
+          });
         });
-      });
+      }).catch(err => reject(err));
     } catch (err) {
       reject(err);
     }
