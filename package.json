@@ -31,7 +31,8 @@
     "js-yaml": "^3.3.0",
     "mongoose": "^6.1.5",
     "mysql": "^2.18.1",
-    "oas-tools": "^2.1.4"
+    "oas-tools": "^2.1.4",
+    "socket.io": "^4.4.0"
   },
   "devDependencies": {
     "axios": "^0.24.0",
