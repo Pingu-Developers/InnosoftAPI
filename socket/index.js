@@ -33,8 +33,8 @@ module.exports.initialize = () => {
     });
 
     socket.on('chatDisconnect', (data) => {
-        socketServer.in(data.room).emit('newMember', `${data.user} se ha ido a la sala`);
-        socket.leave(room);
+      socketServer.in(data.room).emit('newMember', `${data.user} se ha ido a la sala`);
+      socket.leave(data.room);
     });
   });
 
