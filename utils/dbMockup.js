@@ -37,7 +37,6 @@ exports.restore = () => {
   try {
     sinon.restore();
     mock = sinon.mock(dbCon);
-    mongomock = undefined;
   } catch {
     // do nothing
   }
