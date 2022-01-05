@@ -32,14 +32,16 @@ module.exports.initialize = () => {
         });
     });
 
-    socket.on('chatDisconnect', (room) => {
-      socket.leave(room);
+    socket.on('chatDisconnect', (data) => {
+        socketServer.in(data.room).emit('newMember', `${data.user} se ha ido a la sala`);
+        socket.leave(room);
     });
   });
 
   function sendRoomMessages (socket, room) {
     Messages.find({ room })
       .sort({ datetime: -1 })
+      .limit(200)
       .exec()
       .then((messages) => {
         socketServer.in(socket.id).emit('chatMessages', messages);
