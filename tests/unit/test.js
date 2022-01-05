@@ -32,10 +32,7 @@ describe("_________________Innosoft API Tests_________________", function() {
                 var apitest = tests[key];
                 for (let test of apitest.cases) {
                     it (test.description , async () => {
-                        if (key === "api/v1/messages/{roomId}")
-                            mock.findMessages(test.result, test.params);
-                        else 
-                            mock.query(apitest.query, test.result, test.params ? Object.values(test.params) : undefined);
+                        mock.query(apitest.query, test.result, test.params ? Object.values(test.params) : undefined);
                         var url = host + '/' + key.replace(/\{([\w]+)\}/g, (str) => test.params[str.slice(1, -1)]);
                         await axios.get(url).then((response) => {
                             assert.equal(JSON.stringify(response.data), JSON.stringify(test.response));
@@ -55,11 +52,8 @@ describe("_________________Innosoft API Tests_________________", function() {
                 var apitest = tests[key];
                 for (let test of apitest.negativeCases) {
                     it (test.description , async () => {
-                        if (key === "api/v1/messages/{roomId}" && test.result) {
-                            mock.findMessages(test.result, test.params);
-                        } else if (apitest.query && test.result) {
-                                mock.query(apitest.query, test.result, test.params ? Object.values(test.params) : undefined);
-                        }
+                        if (apitest.query && test.result)
+                            mock.query(apitest.query, test.result, test.params ? Object.values(test.params) : undefined);
                         var url = host + '/' + key.replace(/\{([\w]+)\}/g, (str) => test.params[str.slice(1, -1)]);
                         await axios.get(url).then((r) => {
                             assert.fail(`Error on request`);
@@ -68,16 +62,6 @@ describe("_________________Innosoft API Tests_________________", function() {
                         });
                     });
                 }
-            });
-        });
-        describe(`- [ POST ] api/v1/messages/{roomId}`, () => {
-            it ('Should fail when body is empty', async () => {
-                var url = host + '/api/v1/messages/general';
-                await axios.post(url).then((response) => {
-                    assert.fail(`Error on request`);
-                }).catch((err) => {
-                    assert.equal(err.response.status, 500);
-                });
             });
         });
     });

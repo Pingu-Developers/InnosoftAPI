@@ -33,11 +33,3 @@ class WebsiteUser(FastHttpUser):
     @task
     def posts_id(self):
         self.client.get("/api/v1/posts/3231")
-    
-    @task
-    def messages_get(self):
-        self.client.get("/api/v1/messages/general")
-    
-    @task
-    def messages_post(self):
-        self.client.post("/api/v1/messages/general", json = {"messageText": 'Test message', "messageDateTime": '2018-01-01T00:00:00.000Z', "messageUser": { "userName": 'Test user' }})

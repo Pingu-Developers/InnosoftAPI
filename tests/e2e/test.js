@@ -215,29 +215,6 @@ describe("_________________Innosoft API E2E Tests_________________", function() 
                 })
             });
         });
-
-        describe(`- [ /api/v1/messages/{roomId} ]`, () => {
-            it ('[POST] Should add message to general room' , async () => {
-                await axios.post(host + '/api/v1/messages/general', {
-                    messageText: 'Test message',
-                    messageDateTime: '2018-01-01T00:00:00.000Z',
-                    messageUser: { userName: 'Test user' }
-                }).then((response) => {
-                    assert.equal(response.status, 201);
-                }).catch(() => {
-                    assert.fail(`Error on request`);
-                })
-            });
-
-            it ('[GET] Should return 1 elements' , async () => {
-                await axios.get(host + '/api/v1/messages/general').then((response) => {
-                    assert.equal(response.data.length, 1);
-                }).catch(() => {
-                    assert.fail(`Error on request`);
-                })
-            });
-
-        });
     });
 
     describe("\nNegative Cases:", () => {
@@ -292,17 +269,6 @@ describe("_________________Innosoft API E2E Tests_________________", function() 
                     assert.fail(`Error on request`);
                 }).catch((err) => {
                     assert.equal(err.response.status, 404);
-                })
-            });
-        });
-
-        describe(`- [ /api/v1/messages/{roomId} ]`, () => {
-            it ('[POST] Should return 500 if error occurs' , async () => {
-                await axios.post(host + '/api/v1/messages/general')
-                .then(() => {
-                    assert.fail(`Error on request`);
-                }).catch((err) => {
-                    assert.equal(err.response.status, 500);
                 })
             });
         });

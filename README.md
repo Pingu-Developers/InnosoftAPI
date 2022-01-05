@@ -26,10 +26,6 @@ Endpoints documentation is available at ```{host}/docs```:
 [GET] ```/api/v1/posts```: Returns a list containing all posts.
 [GET] ```/api/v1/posts/{id}```: Returns the post with the given id.
 
-#### Messages
-[GET] ```/api/v1/messages/{roomId}```: Returns a list containing all messages for the given room.
-[POST] ```/api/v1/messages/{roomId}```: Sends a message to the given room.
-
 ## Testing
 
 ### Unit testing
