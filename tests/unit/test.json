@@ -122,6 +122,19 @@
                     "TWITTER": "https://link-to-twitter.test",
                     "FACEBOOK": "https://link-to-facebook.test"
                 }
+            ],
+            "one_message" : [
+                {
+                    "_id" : "61d4fb42d10f06311e8fc4db",
+                    "text" : "This is the text of the message",
+                    "datetime" : "2016-01-01T10:10:01Z",
+                    "room" : "general",
+                    "user" : {
+                        "_id" : "61d4fb42d10f06311e8fc4dc",
+                        "name" : "John Doe",
+                        "avatar" : null
+                    }
+                }
             ]
         },
         "responses" : {
@@ -203,6 +216,19 @@
                         "https://link-to-facebook.test"
                     ]
                 } 
+            ],
+            "one_message" : [
+                {
+                    "messageId" : "61d4fb42d10f06311e8fc4db",
+                    "messageText" : "This is the text of the message",
+                    "messageDateTime" : "2016-01-01T10:10:01.000Z",
+                    "messageRoomId" : "general",
+                    "messageUser" : {
+                        "userId" : "61d4fb42d10f06311e8fc4dc",
+                        "userName" : "John Doe",
+                        "userAvatar" : null
+                    }
+                }
             ]
         }
     },
@@ -431,6 +457,30 @@
                     "params" : { "speakerId" : "abcd" },
                     "description" : "Should respond with code 400 if param is invalid", 
                     "code" : 400
+                }
+            ]
+        },
+        "api/v1/messages/{roomId}": {
+            "cases" : [
+                {   
+                    "description" : "Should return no messages when empty", 
+                    "params" : { "roomId" : "general" },
+                    "result" : { "$ref" : "#/$defs/results/empty" },
+                    "response" : { "$ref" : "#/$defs/responses/empty"}
+                },
+                {
+                    "description" : "Should return one message", 
+                    "params" : { "roomId" : "general" },
+                    "result" : { "$ref" : "#/$defs/results/one_message" },
+                    "response" : { "$ref" : "#/$defs/responses/one_message"}
+                }
+            ],
+            "negativeCases" : [
+                {
+                    "description" : "Should respond with code 500 when unexpected error occurs", 
+                    "result" : "wrong result",
+                    "params" : { "roomId" : "general" },
+                    "code" : 500
                 }
             ]
         }

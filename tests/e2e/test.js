@@ -12,8 +12,8 @@ describe("_________________Innosoft API E2E Tests_________________", function() 
         console.log('---------- Start E2E infrastructure ----------');
         try {
             //execSync("host-manager -add host.docker.internal 172.17.0.1");
-            execSync("docker-compose -f tests/docker-compose-e2e.yaml pull db innoApi");
-            execSync("docker-compose -f tests/docker-compose-e2e.yaml up -d db innoApi");
+            execSync("docker-compose -f tests/docker-compose-e2e.yaml pull db innoApi innoChatDb");
+            execSync("docker-compose -f tests/docker-compose-e2e.yaml up -d db innoApi innoChatDb");
             setTimeout(() => done(), 25000);
         } 
         catch (err) {

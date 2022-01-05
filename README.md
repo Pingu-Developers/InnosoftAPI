@@ -25,3 +25,18 @@ Endpoints documentation is available at ```{host}/docs```:
 #### Posts
 [GET] ```/api/v1/posts```: Returns a list containing all posts.
 [GET] ```/api/v1/posts/{id}```: Returns the post with the given id.
+
+#### Messages
+[GET] ```/api/v1/messages/{roomId}```: Returns a list containing all messages for the given room.
+[POST] ```/api/v1/messages/{roomId}```: Sends a message to the given room.
+
+## Testing
+
+### Unit testing
+Unit tests have been coded using sinon mocks for Mysql and MongoDB queries. Unit tests are run with [mocha](https://www.npmjs.com/package/mocha) by executing ```npm run test```. The ```tests/unit/tests.json``` file contains the list of unit tests to be executed.
+
+### End-to-end testing
+End-to-end testing is done by running the ```tests/docker-compose-e2e.yml``` file. Tests are executed by executing ```npm run e2e```.
+
+### Load testing
+Locust is used to load test the API. Locust is executed inside a Docker container, Locust service can be be found inside the ```tests/docker-compose-e2e.yml``` file. In order to run load tests, execute ```npm run e2e```, then access to Locust interface at ```http://localhost:8089/```. The locustfile containing the tasks can be found at ```tests/locustfile.py```.

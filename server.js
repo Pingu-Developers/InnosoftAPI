@@ -32,24 +32,25 @@ const deploy = (env) => {
         validator: true
       };
 
-      mongoose.connect(mongoURL).then(() => {
-        oasTools.configure(options);
+      oasTools.configure(options);
 
-        oasTools.initialize(oasDoc, app, function () {
-          http.createServer(app).listen(serverPort, function () {
-            if (env !== 'test') {
+      oasTools.initialize(oasDoc, app, function () {
+        http.createServer(app).listen(serverPort, function () {
+          if (env !== 'test') {
+            mongoose.connect(mongoURL)
+              .then(() => console.log(`Connected to MongoDB at ${mongoURL}`))
+              .catch(() => console.warn(`Could not connect to MongoDB at ${mongoURL}`));
+            console.log('________________________________________________________________');
+            console.log('App running!');
+            console.log('________________________________________________________________');
+            if (options.docs !== false) {
+              console.log('API docs (Swagger UI) available on /docs');
               console.log('________________________________________________________________');
-              console.log('App running!');
-              console.log('________________________________________________________________');
-              if (options.docs !== false) {
-                console.log('API docs (Swagger UI) available on /docs');
-                console.log('________________________________________________________________');
-              }
             }
-            resolve();
-          });
+          }
+          resolve();
         });
-      }).catch(err => reject(err));
+      });
     } catch (err) {
       reject(err);
     }
