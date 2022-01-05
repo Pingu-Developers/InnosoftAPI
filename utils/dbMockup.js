@@ -3,7 +3,7 @@ const sinon = require('sinon');
 require('sinon-mongoose');
 
 const dbCon = require('./dbConnection');
-const Messages = require(`../models/Message`);
+const Messages = require('../models/Message');
 let mock = sinon.mock(dbCon);
 
 exports.query = (query, output, params) => {
@@ -15,8 +15,7 @@ exports.query = (query, output, params) => {
 };
 
 exports.findMessages = (output, params) => {
-
-  if (Array.isArray(output)){
+  if (Array.isArray(output)) {
     output.forEach(m => {
       m._id = mongoose.Types.ObjectId(m._id);
       m.datetime = new Date(m.datetime);
@@ -32,7 +31,7 @@ exports.findMessages = (output, params) => {
     .withArgs({ datetime: -1 })
     .chain('exec')
     .resolves(output);
-}
+};
 
 exports.restore = () => {
   try {
