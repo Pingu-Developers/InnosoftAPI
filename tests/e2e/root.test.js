@@ -1,17 +1,17 @@
 const assert = require('assert');
 const axios = require('axios');
 const { execSync } = require("child_process");
+const socket = require("socket.io-client")('http://localhost:5001', {transports: ['websocket']});
 
 /* Declaring const vars */
 const host = "http://localhost:5000"
 
-describe("_________________Innosoft API E2E Tests_________________", function() {
+describe("_________________Innosoft E2E Tests_________________", function() {
 
     /* EXECUTED BEFORE ALL TESTS */
     before((done) => {
         console.log('---------- Start E2E infrastructure ----------');
         try {
-            //execSync("host-manager -add host.docker.internal 172.17.0.1");
             execSync("docker-compose -f tests/docker-compose-e2e.yaml pull db innoApi innoChatDb");
             execSync("docker-compose -f tests/docker-compose-e2e.yaml up -d db innoApi innoChatDb");
             setTimeout(() => done(), 25000);
@@ -275,10 +275,46 @@ describe("_________________Innosoft API E2E Tests_________________", function() 
 
     });
 
+    describe("\nSocket Tests:", () => {
+        
+        /* TEST CASES */
+        socket.connect();
+
+        it ('Should return no messages when joining a new room and show join message', () => {
+            socket.on('chatMessages', (msg) => {
+                assert.equal(msg.length, 0);
+            });
+        });
+
+        it ('Should return new member message', () => {
+            socket.on('newMember', (msg) => {
+                assert.equal(msg, 'test se ha unido a la sala');
+            });
+        });
+
+        it ('Should send a new message and return it', () => {
+            let newmsg = { text:'test', datetime: new Date(), room: 'test', user: { _id: 'testId', name: 'test', avatar: '' }};
+
+            socket.emit('chatMessage', newmsg);
+            socket.on('chatMessage', (msg) => {
+                assert.equal(msg, newmsg);
+            });
+        });
+
+        it ('Should show message when member disconnects', () => {
+            socket.emit('chatDisconnect', {user: 'test', room: 'test'});
+            socket.on('newMember', (msg) => {
+                assert.equal(msg, 'test se ha ido a la sala');
+                socket.disconnect();
+            });
+        });
+    });
+
     /* EXECUTED AFTER ALL TESTS */
     after((done) => {
         console.log('---------- Stop E2E infrastructure ----------');
         try {
+            socket.disconnect();
             execSync("docker-compose -f tests/docker-compose-e2e.yaml down");
             done();
         } catch (err) {

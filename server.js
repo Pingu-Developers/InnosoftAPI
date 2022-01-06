@@ -38,8 +38,10 @@ const deploy = (env) => {
       oasTools.initialize(oasDoc, app, function () {
         const server = http.createServer(app);
         mongoose.connect(mongoURL)
-          .then(() => { socket.initialize(); console.log(`Connected to MongoDB at ${mongoURL}`); })
-          .catch(() => console.warn(`Could not connect to MongoDB at ${mongoURL}`));
+          .then(() => {
+            socket.initialize(env);
+            if (env !== 'test') console.log(`Connected to MongoDB at ${mongoURL}`);
+          }).catch(() => console.warn(`Could not connect to MongoDB at ${mongoURL}`));
         server.listen(serverPort, function () {
           if (env !== 'test') {
             console.log('________________________________________________________________');

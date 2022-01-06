@@ -1,29 +1,13 @@
 const assert = require('assert');
 const axios = require('axios');
-const server = require('../../server');
 const mock = require('../../utils/dbMockup');
 const deref = require('json-schema-deref-sync');
 
 /* Declaring const vars */
-const tests = deref(require('./test.json')).tests;
+const tests = deref(require('./api.json')).tests;
 const host = "http://localhost:5000"
 
 describe("_________________Innosoft API Tests_________________", function() {
-
-    /* EXECUTED BEFORE ALL TESTS */
-    before( (done) => {
-        server.deploy('test').then(() => {
-            done();
-        }).catch( (err) => {
-            console.log(err);
-            done(err);
-        })
-    });
-    
-    /* Restore mock functionality after each test*/
-    afterEach( () => { 
-        mock.restore()
-    });        
 
     /* ENDPOINT TESTS */
     describe("\nPositive Cases:", () => {
@@ -64,10 +48,5 @@ describe("_________________Innosoft API Tests_________________", function() {
                 }
             });
         });
-    });
-
-    /* EXECUTED AFTER ALL TESTS */
-    after((done) => {
-        server.undeploy(done);
     });
 });

@@ -5,14 +5,14 @@ const io = require('socket.io');
 
 const Messages = require('../models/Message');
 
-module.exports.initialize = () => {
+module.exports.initialize = (env) => {
   const server = http.createServer().listen(socketPort);
   const socketServer = io(server);
 
   socketServer.on('connection', (socket) => {
     socket.on('chatConnection', (data) => {
       socket.join(data.room);
-      console.log(`User ${data.user} connected to room ${data.room}`);
+      if (env !== 'test') console.log(`[WS] User ${data.user} connected to room ${data.room}`);
       sendRoomMessages(socket, data.room);
       socketServer.in(data.room).emit('newMember', `${data.user} se ha unido a la sala`);
     });
@@ -28,7 +28,7 @@ module.exports.initialize = () => {
         .then((msg) => {
           socketServer.in(data.room).emit('chatMessage', msg);
         }).catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     });
 
@@ -46,7 +46,7 @@ module.exports.initialize = () => {
       .then((messages) => {
         socketServer.in(socket.id).emit('chatMessages', messages);
       }).catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   }
 };
