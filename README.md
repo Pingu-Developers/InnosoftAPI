@@ -145,7 +145,7 @@ When in production environment, databases ports should not be binded to server p
     innoChatDb: null
     mysqlDb: null
 ```
-To deploy the system just write a .env file containing the enironment variables and run ```docker-compose --env-file .env up -d```. Environment variables and their default value can be found at the [environment section](#Environment).
+To deploy the system just write a .env file containing the enironment variables and run ```docker-compose --env-file .env up -d```. Environment variables and their default value can be found at the [environment section](#environment).
 
 ### Deploying on VMs
 Deploying systems on virtual machines is a way to test isolated environments. Innosoft API provides support to install itself inside a virtual machine through Vargrant & Ansible, configuration files can be found inside Vagrant directory. Steps on how to run the app on Vagrant using Ansible are described below:
@@ -167,12 +167,12 @@ Vagrant up
 
 ## ⚙ Environment
 * **PORT:** Container port where de Node.js application will run. Default = `80`
-* **DB_HOST:** Mysql database host. Defaults to DB service name for internal connection.
+* **DB_HOST:** Mysql database host. Default = `localhost`.
 * **DB_PORT:** Mysql database port. Default = `3306`.
 * **DB_USER:** Mysql database user to connect with. Default = `root`.
 * **DB_PASSWORD:** Mysql password for connection. Default = `innosoft`.
 * **DB_NAME:** Mysql database name to connect to. Default = `innosoft`.
-* **MONGO_HOST:** MongoDB host to connect to. Defaults to DB service name for internal connection.
+* **MONGO_HOST:** MongoDB host to connect to. Default = `localhost`.
 * **MONGO_PORT:** MongoDB port. Default = `27017`.
 * **MONGO_DBNAME:** MongoDB database that will be created upon connection. Default = `innoChat`.
 * **SOCKET_PORT:** Server port where the server-side websocket application will run. Default = `5001`.
