@@ -54,7 +54,7 @@ When in tests environment, Docker is used to deploy and execute tests on the cod
 * MysqlDB: Filled with test data at ```test/dbdata/innosoft.sql```, like in MongoDB, test credentials are set on env vars and connections are made internally.
 * Locust: Locust container for running load testing, it depends on locust file found at test directory.
 * Api: The api service itself, subject of testing. Service is deployed at host port 5000 (5001 for websocket) and test requests are sent to http://localhost:5000.
-Further details on testing are explained below at [testing section](https://github.com/Pingu-Developers/InnosoftAPI#testing).
+Further details on testing are explained below at [testing section](#-testing).
 
 ### Development Environment
 When developping, required infrastructure can be provided by executing Docker containers while running the code on host and connecting to containers. In order for that to work, container ports where containers run MongoDb and Mysql shall be binded to host machine ports. Additionally, a Mysql database administration tool like PhpMyAdmin can be deploy to manage the database. The following docker-compose.yml file can be used for running the required infrastructure:
@@ -145,7 +145,7 @@ When in production environment, databases ports should not be binded to server p
     innoChatDb: null
     mysqlDb: null
 ```
-To deploy the system just write a .env file containing the enironment variables and run ```docker-compose --env-file .env up -d```. Environment variables and their default value can be found at the [environment section](#environment).
+To deploy the system just write a .env file containing the enironment variables and run ```docker-compose --env-file .env up -d```. Environment variables and their default value can be found at the [environment section](#-environment).
 
 ### Deploying on VMs
 Deploying systems on virtual machines is a way to test isolated environments. Innosoft API provides support to install itself inside a virtual machine through Vargrant & Ansible, configuration files can be found inside Vagrant directory. Steps on how to run the app on Vagrant using Ansible are described below:
