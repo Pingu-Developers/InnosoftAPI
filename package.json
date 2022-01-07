@@ -11,8 +11,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha ./tests/unit/root.test.js --timeout 20000 -s 20",
-    "e2e": "mocha ./tests/e2e/root.test.js --timeout 100000 -s 20",
+    "test:unit": "mocha ./tests/unit/root.test.js --timeout 20000 -s 20",
+    "test:integration": "mocha ./tests/integration/root.test.js --timeout 100000 -s 20",
+    "test:load": "docker-compose -f ./tests/docker-compose-test.yaml up -d",
     "coverage": "nyc --reporter=lcov mocha ./tests/unit/root.test.js --timeout 20000 -s 20",
     "cov": "nyc mocha ./tests/unit/root.test.js --timeout 20000 -s 20",
     "lint": "semistandard",

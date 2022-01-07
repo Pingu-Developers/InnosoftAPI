@@ -6,8 +6,12 @@ name: Node.js CI
 on:
   push:
     branches: [ main, develop ]
+      paths-ignore:
+        - '**/*.md'
   pull_request:
     branches: [ main, develop ]
+      paths-ignore:
+        - '**/*.md'
 
 jobs:
   test:
@@ -29,7 +33,7 @@ jobs:
       env:
         CI: true
     - name: Run tests
-      run: npm run test
+      run: npm run test:unit
       env:
         CI: true
     - name: Generate coverage report
@@ -67,8 +71,8 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-  e2eTest:
-    name: (develop) E2E - Checkout, install mocha and run tests (docker-compose up, mocha tests and docker-compose down)
+  integrationTest:
+    name: (develop) Integration Tests - Checkout, install mocha and run tests (docker-compose up, mocha tests and docker-compose down)
     needs: buildTest
     runs-on: ubuntu-latest
     strategy:
@@ -85,12 +89,12 @@ jobs:
     - name: Add host.docker.internal association to 172.17.0.1
       run: sudo echo "172.17.0.1 host.docker.internal" | sudo tee -a /etc/hosts
     - name: Run tests
-      run: npm run e2e
+      run: npm run test:integration
       env:
         CI: true
 
-  e2eMain:
-    name: (main) E2E - Checkout infrastructure, install mocha and run tests (docker-compose up, mocha tests and docker-compose down)
+  integrationTestMain:
+    name: (main) Integration Tests - Checkout infrastructure, install mocha and run tests (docker-compose up, mocha tests and docker-compose down)
     if: ${{ github.ref == 'refs/heads/main' }}
     needs: test
     runs-on: ubuntu-latest
@@ -108,14 +112,14 @@ jobs:
     - name: Add host.docker.internal association to 172.17.0.1
       run: sudo echo "172.17.0.1 host.docker.internal" | sudo tee -a /etc/hosts
     - name: Run tests
-      run: npm run e2e
+      run: npm run test:integration
       env:
         CI: true
 
   buildProdAndRelease:
     name: Release, build and push to dockerhub using tag version
     if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push'}}
-    needs: e2eMain
+    needs: integrationTestMain
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2    

@@ -39,8 +39,8 @@ This job is executed in push and pull requests, it checks code syntax using [sem
 #### Build Docker image
 In order to build a docker image using CI, setting up Docker in the runner is needed. Docker provides actions for setting up QEMU, BuildX and login to DockerHub. DOCKERHUB_USER and DOCKERHUB_PASSWORD secrets are needed. Once the login succeeds, the image is built and pushed to hub, image digest is echoed at the end. If commits are pushed to ```develop``` branch, docker image tag will be set to ```:develop```, while when pushed to ```main``` tag is set to the version tag produced by [Conventional Changelog](https://github.com/TriPSs/conventional-changelog-action). This job is skipped on pull requests.
 
-#### E2E Tests run
-In case commits are pushed to develop, end to end tests are runned after building and pushing docker image, this way the new image is tested right after being pushed. On the other hand, on commits to main branch, e2e tests run before publishing the new release. Main commits come directly from develop, this way the develop image is tested before dockerizing and publishing a new release.
+#### Integration Tests run
+In case commits are pushed to develop, end to end tests are runned after building and pushing docker image, this way the new image is tested right after being pushed. On the other hand, on commits to main branch, integration tests run before publishing the new release. Main commits come directly from develop, this way the develop image is tested before dockerizing and publishing a new release.
 
 #### Release
 Before creating a release, a changelog is generated using Conventional Changelog action. This action outputs the new version, that is assigned depending on the commits following [Conventional Commits format](https://www.conventionalcommits.org/en/v1.0.0/). This way, using Github's release action, a new Github Release is created with the new version tag, the generated Changelog.md is attached to release and pushed to repo with GITHUB_TOKEN, so the workflow doesn't get triggered in loops. Finally, after publishing github release, code is dockerized and pushed, and a sync pull request is created from main to develop.
@@ -49,7 +49,7 @@ Before creating a release, a changelog is generated using Conventional Changelog
 The deployment of the system depends on the environment it will be deployed to: Testing, Development and Production.
 
 ### Testing Environment
-When in tests environment, Docker is used to deploy and execute tests on the code. The system can be deployed by running ```docker-compose up``` on ```/tests/docker-compose-e2e.yml```. This compose contains the following services:
+When in tests environment, Docker is used to deploy and execute tests on the code. The system can be deployed by running ```docker-compose up``` on ```/tests/docker-compose-test.yml```. This compose contains the following services:
 * MongoDB: Initially empty, tests credentials are set on environment and connections are made internally through docker network.
 * MysqlDB: Filled with test data at ```test/dbdata/innosoft.sql```, like in MongoDB, test credentials are set on env vars and connections are made internally.
 * Locust: Locust container for running load testing, it depends on locust file found at test directory.
@@ -151,15 +151,19 @@ To deploy the system just write a .env file containing the enironment variables 
 Deploying systems on virtual machines is a way to test isolated environments. Innosoft API provides support to install itself inside a virtual machine through Vargrant & Ansible, configuration files can be found inside Vagrant directory. Steps on how to run the app on Vagrant using Ansible are described below:
 
 #### Prerequisites
-On a **Linux machine**, install Vagrant, Ansible and VirtualBox.<br/>
-```sudo apt install Vagrant Ansible Virtualbox```
+On a **Linux machine**, install Vagrant, Ansible and VirtualBox.
+```
+sudo apt install Vagrant Ansible Virtualbox
+```
 
 #### Provisioning Databases
 Since the current configuration only deploys the API service, you may need to install mysql and mongodb inside the VM. Running them on Docker in host (or in vm) and connecting through localhost by binding ports is also a valid workaround.
 
 #### Running Vagrant
-API provisioning is configured through Ansible in ```Vagrant/playbook.yml``` file, so in order to run the VM, install and run the Node.js Application, just run vagrant up command<br/>
-```Vagrant up```
+API provisioning is configured through Ansible in ```Vagrant/playbook.yml``` file, so in order to run the VM, install and run the Node.js Application, just run vagrant up command.
+```
+Vagrant up
+```
 
 ## ⚙ Environment
 * **PORT:** Container port where de Node.js application will run. Default = `80`
@@ -176,12 +180,23 @@ API provisioning is configured through Ansible in ```Vagrant/playbook.yml``` fil
 ## 🧪 Testing
 
 ### Unit testing
-Unit tests have been coded using sinon mocks for Mysql and MongoDB queries. Unit tests are run with [mocha](https://www.npmjs.com/package/mocha) by executing ```npm run test```. The ```tests/unit/tests.json``` file contains the list of unit tests to be executed.
+Unit tests have been coded using sinon mocks for Mysql and MongoDB queries. Unit tests are run with [mocha](https://www.npmjs.com/package/mocha). To execute unit tests run the following line:
+```
+npm run test:unit
+```
+The ```tests/unit/tests.json``` file contains the list of unit tests to be executed.
 
-### End-to-end testing
-End-to-end testing is done by running the ```tests/docker-compose-e2e.yml``` file. Tests are executed by executing ```npm run e2e```.
+### Integration testing
+Integration testing is done by running the ```tests/docker-compose-test.yaml``` file. Tests are executed by executing the following command:
+```
+npm run test:integration
+```
 
 ### Load testing
-Locust is used to load test the API. Locust is executed inside a Docker container, Locust service can be be found inside the ```tests/docker-compose-e2e.yml``` file. In order to run load tests, execute ```npm run e2e```, then access to Locust interface at ```http://localhost:8089/```. The locustfile containing the tasks can be found at ```tests/locustfile.py```.
+Locust is used to load test the API. Locust is executed inside a Docker container, Locust service can be be found inside the ```tests/docker-compose-test.yml``` file. In order to run load tests, execute:
+```
+npm run test:load
+```
+Then access to Locust interface at ```http://localhost:8089/```. The locustfile containing the tasks can be found at ```tests/locustfile.py```.
 
 
