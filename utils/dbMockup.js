@@ -9,6 +9,7 @@ exports.query = (query, output, params) => {
     mock.expects('query').withExactArgs(query).resolves(output);
   }
 };
+
 exports.restore = () => {
   try {
     sinon.restore();

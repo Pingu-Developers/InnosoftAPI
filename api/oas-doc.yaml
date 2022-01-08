@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 1.0.0
+  version: 1.3.0
   title: Innosoft API
   description: >-
     Service to expose innosoft database as a RESTFUL API following Open Api v3

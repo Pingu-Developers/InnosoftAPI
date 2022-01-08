@@ -1,0 +1,43 @@
+---
+- hosts: all
+  tasks:
+    - name: Install packages
+      become: yes
+      apt:
+        name: "{{ packages }}"
+        update_cache: yes
+      vars:
+        packages:
+        - acl
+        - git
+        - nodejs
+        - npm
+    
+    - name: Install forever globally
+      become: yes
+      npm:
+        global: yes
+        name: forever
+
+    - name: Create innosoft user
+      become: yes
+      user:
+        name: innosoft
+        comment: Innosoft app user
+        state: present
+
+    - name: Clone project
+      become: yes
+      become_user: innosoft
+      git:
+        repo: https://github.com/Pingu-Developers/InnosoftAPI.git
+        dest: /home/innosoft/InnosoftAPI
+        version: main
+
+    - name: Run project
+      become: yes
+      become_user: innosoft
+      command: "{{ item }} chdir=/home/innosoft/InnosoftAPI"
+      with_items:
+        - npm install
+        - forever start index.js
