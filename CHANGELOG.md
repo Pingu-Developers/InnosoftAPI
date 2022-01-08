@@ -1,3 +1,24 @@
+# [1.3.0](https://github.com/Pingu-Developers/InnosoftAPI/compare/v1.2.0...v1.3.0) (2022-01-08)
+
+
+### Bug Fixes
+
+* Fixed events order when dates are equal ([fd471be](https://github.com/Pingu-Developers/InnosoftAPI/commit/fd471beef5d06eac7fa31bdde8718a8645d69324))
+* Releasing connection to avoid service hang ([4135aab](https://github.com/Pingu-Developers/InnosoftAPI/commit/4135aabdb51b4c7d2ca50401e1d8ceba3f7405f3))
+* Removed chat from API for websocket impl. ([b12c8df](https://github.com/Pingu-Developers/InnosoftAPI/commit/b12c8df7ac4920fceb9e1e4de1926855cb0d9df6))
+* Vagrant playbook and port bug fixed ([883b28b](https://github.com/Pingu-Developers/InnosoftAPI/commit/883b28b3b476d468ec276e69e39798fb8bbfe2fb))
+
+
+### Features
+
+* Added Vagrant files ([17a06fc](https://github.com/Pingu-Developers/InnosoftAPI/commit/17a06fc8e3cfcab5fea03fda4b1b9654d801314f))
+* Implemented forum-like message feature ([2898fbc](https://github.com/Pingu-Developers/InnosoftAPI/commit/2898fbc5ea81517e074e4f082a66d05a973b1c4c))
+* Returning events ordered by date ([01ca744](https://github.com/Pingu-Developers/InnosoftAPI/commit/01ca744549010ba7197aefcfc010d9e26dbf3ab6))
+* Support for system messages ([134a1b3](https://github.com/Pingu-Developers/InnosoftAPI/commit/134a1b3a6c5a8971b8608cfdc4076172ab588dfa))
+* Using Websockets to implement chat feature ([f313c4d](https://github.com/Pingu-Developers/InnosoftAPI/commit/f313c4d1d8c84cf046cd0fafa620c8cd60cf7c07))
+
+
+
 # [1.2.0](https://github.com/Pingu-Developers/InnosoftAPI/compare/v1.1.0...v1.2.0) (2021-11-06)
 
 
