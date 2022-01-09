@@ -12,12 +12,32 @@
         - git
         - nodejs
         - npm
+        - docker.io
     
-    - name: Install forever globally
+    - name: Install docker-compose
+      become: yes
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64"
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+
+    - name: Install forever with npm globally
       become: yes
       npm:
         global: yes
         name: forever
+
+    - name: Install n with npm globally
+      become: yes
+      npm:
+        global: yes
+        name: 'n'
+
+    - name: Update latest node version
+      become: yes
+      command: "{{ item }}"
+      with_items:
+        - n stable
 
     - name: Create innosoft user
       become: yes
@@ -33,11 +53,22 @@
         repo: https://github.com/Pingu-Developers/InnosoftAPI.git
         dest: /home/innosoft/InnosoftAPI
         version: main
+    
+    - name: Run infrastructure
+      become: yes
+      command: "{{ item }} chdir=/home/innosoft/InnosoftAPI"
+      with_items:
+        - systemctl enable docker
+        - systemctl start docker
+        - docker-compose -f tests/docker-compose-test.yaml up -d db innoChatDb
 
     - name: Run project
       become: yes
       become_user: innosoft
       command: "{{ item }} chdir=/home/innosoft/InnosoftAPI"
+      environment:
+        DB_PASSWORD: testdb
+        DB_NAME: innosoft-test
       with_items:
         - npm install
         - forever start index.js
