@@ -157,7 +157,7 @@ sudo apt install Vagrant Ansible Virtualbox
 ```
 
 #### Provisioning Databases
-Since the current configuration only deploys the API service, you may need to install mysql and mongodb inside the VM. Running them on Docker in host (or in vm) and connecting through localhost by binding ports is also a valid workaround.
+Mysql and MongoDB databases are configured through ansible provisioning by installing docker-compose and running containers. However, if you wish to modify BD data or env vars, you may consider to connect to VM via ssh and execute desired changes, then kill the Node process by its PID and re run the API through `npm start`.
 
 #### Running Vagrant
 API provisioning is configured through Ansible in ```Vagrant/playbook.yml``` file, so in order to run the VM, install and run the Node.js Application, just run vagrant up command.
