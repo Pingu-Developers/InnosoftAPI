@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/Pingu-Developers/InnosoftAPI/compare/v1.3.0...v1.3.1) (2022-01-09)
+
+
+### Bug Fixes
+
+* Fixed Vagrant VM NodeJS version error ([cbc8a88](https://github.com/Pingu-Developers/InnosoftAPI/commit/cbc8a88a7bbed32af95e6840d5bd3c02a0a17ef7))
+
+
+
 # [1.3.0](https://github.com/Pingu-Developers/InnosoftAPI/compare/v1.2.0...v1.3.0) (2022-01-08)
 
 
